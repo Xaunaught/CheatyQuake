@@ -9,7 +9,8 @@ public class PlayerController : NetworkBehaviour
     private CharacterController controller;
 
     public float rotationSpeed = 2.0f;
-    public float walkSpeed = 10.0f;
+    public float defaultWalkSpeed = 10.0f;
+    public float walkSpeed;
     public Transform head;
 
     public float maxHeadRotation = 80.0f;
@@ -20,7 +21,8 @@ public class PlayerController : NetworkBehaviour
     private float lastTimeFired;
 
     private float yVelocity = 0;
-    public float jumpSpeed = 15.0f;
+    public float jumpSpeed;
+    public float defaultJump = 15f;
     public float gravity = 30.0f;
 
     private Vector3 moveVelocity = Vector3.zero;
@@ -30,6 +32,8 @@ public class PlayerController : NetworkBehaviour
     void Start()
     {
         controller = GetComponent<CharacterController>();
+        walkSpeed = defaultWalkSpeed;
+        jumpSpeed = defaultJump;
     }
 
     void Update()

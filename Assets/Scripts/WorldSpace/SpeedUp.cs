@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SpeedUp : MonoBehaviour {
-    public GameObject playerManager;
-    public GameObject powerUpManager;
+    private GameObject playerManager;
+    private GameObject powerUpManager;
 	// Use this for initialization
-	void Start () {
-        
+	void Awake () {
+        playerManager = GameObject.Find("PlayerManager");
+        powerUpManager = GameObject.Find("PowerUpManager");
 	}
 	
 	// Update is called once per frame
@@ -26,7 +27,8 @@ public class SpeedUp : MonoBehaviour {
                 players[i].GetComponent<PlayerController>().walkSpeed = players[i].GetComponent<PlayerController>().walkSpeed * 2;
             }
             powerUpManager.GetComponent<PowerUpManager>().StartCoroutine("Reset");
-            gameObject.SetActive(false);
+            powerUpManager.GetComponent<PowerUpManager>().StartCoroutine("PowerUpTimer");
+            Destroy(gameObject);
         }
     }
 
