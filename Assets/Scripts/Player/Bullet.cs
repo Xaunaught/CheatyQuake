@@ -4,6 +4,8 @@ using System.Collections;
 public class Bullet : MonoBehaviour {
     public float speed = 20.0f;
     public float life = 5.0f;
+    public float radius = 2;
+    public float explosionPower = 5;
 
     void Start()
     {
@@ -15,16 +17,32 @@ public class Bullet : MonoBehaviour {
         //transform.position += transform.forward * speed * Time.deltaTime;
         
     }
-    void OnTriggerEnter(Collider col)
+    void OnCollisionEnter(Collision col)
     {
-        var hit = col.gameObject;
-        var health = hit.GetComponent<Health>();
-        if (health  != null)
-        {
-            health.TakeDamage(10);
-        }
+        ContactPoint contact = col.contacts[0];
+        Quaternion rotation = Quaternion.FromToRotation(Vector3.up, contact.normal);
+        Vector3 position = contact.point;
+        ExplosionDamage(position, radius);
         Kill();
     }
+
+    void ExplosionDamage(Vector3 explosionPosition, float radius)
+    {
+        //gets array of everything in an explosion
+        Collider[] hitColliders = Physics.OverlapSphere(explosionPosition, radius);
+        for (int i = 0; i < hitColliders.Length; i++)
+        {
+            //print("checking for players");
+            if (hitColliders[i].tag == "Player")
+            {
+                print("hit a player");
+                Vector3 direction = hitColliders[i].transform.position - explosionPosition;
+                float force = Mathf.Clamp(explosionPower / 3, 0, 100000);
+                hitColliders[i].GetComponent<ImpactReceiver>().AddImpact(direction, force);
+            }
+        }
+    }
+
     void Kill()
     {
         Destroy(gameObject);

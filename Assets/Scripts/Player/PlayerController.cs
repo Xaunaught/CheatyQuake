@@ -3,8 +3,8 @@ using UnityEngine.Networking;
 
 public class PlayerController : NetworkBehaviour
 {
-	public GameObject bulletPrefab;
-	public Transform bulletSpawn;
+    public GameObject bulletPrefab;
+    public Transform bulletSpawn;
     public GameObject playerCamera;
     private CharacterController controller;
 
@@ -37,19 +37,19 @@ public class PlayerController : NetworkBehaviour
     }
 
     void Update()
-	{
-		if (!isLocalPlayer)
-		{
-			return;
-		}
-		if (Input.GetButtonDown("Fire1") && Time.time > lastTimeFired + reloadTime)
-		{
-			CmdFire();
-		}
+    {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+        if (Input.GetButtonDown("Fire1") && Time.time > lastTimeFired + reloadTime)
+        {
+            CmdFire();
+        }
         if (controller.isGrounded)
         {
             yVelocity = -1;
-            
+
 
 
             if (Input.GetButtonDown("Jump"))
@@ -59,9 +59,9 @@ public class PlayerController : NetworkBehaviour
             }
         }
 
-        if(!controller.isGrounded)
+        if (!controller.isGrounded)
         {
-            moveVelocity = transform.TransformDirection(new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"))) * (walkSpeed /2);
+            moveVelocity = transform.TransformDirection(new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"))) * (walkSpeed / 2);
             moveVelocity += jumpVelocity;
         }
         else
@@ -69,10 +69,10 @@ public class PlayerController : NetworkBehaviour
 
         //Vector3 velocity = moveVelocity + yVelocity * Vector3.up;
         Vector2 mouseInput = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-
+        Debug.Log(controller.isGrounded);
         yVelocity -= gravity * Time.deltaTime;
 
-        moveVelocity.y = yVelocity ;
+        moveVelocity.y = yVelocity;
         controller.Move(moveVelocity * Time.deltaTime);
 
 
@@ -81,33 +81,33 @@ public class PlayerController : NetworkBehaviour
         head.localRotation = Quaternion.identity;
         head.Rotate(Vector3.left, currentHeadRotation);
 
-        
+
 
     }
     [Command]
-	void CmdFire()
-	{
-		// Create the Bullet from the Bullet Prefab
-		var bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
+    void CmdFire()
+    {
+        // Create the Bullet from the Bullet Prefab
+        var bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
 
-		// Add velocity to the bullet
-		//bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 6;
-		
-		// Spawn the bullet on the Clients
-		NetworkServer.Spawn(bullet);
+        // Add velocity to the bullet
+        //bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 6;
+
+        // Spawn the bullet on the Clients
+        NetworkServer.Spawn(bullet);
 
         lastTimeFired = Time.time;
 
-		// Destroy the bullet after 2 seconds
-		//Destroy(bullet, 2.0f);        
-	}
-	
-	public override void OnStartLocalPlayer()
-	{
-		GetComponent<MeshRenderer>().material.color = Color.blue;
+        // Destroy the bullet after 2 seconds
+        //Destroy(bullet, 2.0f);        
+    }
+
+    public override void OnStartLocalPlayer()
+    {
+        GetComponent<MeshRenderer>().material.color = Color.blue;
         print(GetComponentInChildren<Camera>());
         playerCamera.SetActive(true);
         //playerCamera.GetComponent<AudioListener>().enabled = true;
     }
-	
+
 }
