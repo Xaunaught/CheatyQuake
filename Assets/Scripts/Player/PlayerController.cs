@@ -18,6 +18,7 @@ public class PlayerController : NetworkBehaviour
     private float currentHeadRotation = 0;
 
     public float reloadTime = 0.5f;
+    public float defaultReloadTime = 0.5f;
     private float lastTimeFired;
 
     private float yVelocity = 0;
@@ -69,7 +70,6 @@ public class PlayerController : NetworkBehaviour
 
         //Vector3 velocity = moveVelocity + yVelocity * Vector3.up;
         Vector2 mouseInput = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-        Debug.Log(controller.isGrounded);
         yVelocity -= gravity * Time.deltaTime;
 
         moveVelocity.y = yVelocity;

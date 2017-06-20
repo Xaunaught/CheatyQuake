@@ -5,7 +5,7 @@ using UnityEngine;
 public class SpeedUp : MonoBehaviour {
     private GameObject playerManager;
     private GameObject powerUpManager;
-	// Use this for initialization
+
 	void Awake () {
         playerManager = GameObject.Find("PlayerManager");
         powerUpManager = GameObject.Find("PowerUpManager");

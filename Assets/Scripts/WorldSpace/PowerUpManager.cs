@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PowerUpManager : MonoBehaviour {
     public GameObject playerManager;
-    
+    public GameObject bulletPrefab;
 
     public int powerUpTimer;
     public int respawnTimer;
@@ -25,9 +25,12 @@ public class PowerUpManager : MonoBehaviour {
 
         yield return new WaitForSeconds(powerUpTimer);
         List<GameObject> players = playerManager.GetComponent<PlayerManager>().players;
+        bulletPrefab.GetComponent<Bullet>().instakill = false;
+        bulletPrefab.GetComponent<Bullet>().noDamage = false;
         for (int i = 0; i < players.Count; i++)
         {
             players[i].GetComponent<PlayerController>().walkSpeed = players[i].GetComponent<PlayerController>().defaultWalkSpeed;
+            players[i].GetComponent<PlayerController>().reloadTime = players[i].GetComponent<PlayerController>().defaultReloadTime;
         }
     }
     public IEnumerator PowerUpTimer()

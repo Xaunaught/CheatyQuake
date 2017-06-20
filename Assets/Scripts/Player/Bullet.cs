@@ -6,6 +6,10 @@ public class Bullet : MonoBehaviour {
     public float life = 5.0f;
     public float radius = 2;
     public float explosionPower = 5;
+    public int damage = 10;
+    public GameObject explosionParticle;
+    public bool instakill = false;
+    public bool noDamage = false;
 
     void Start()
     {
@@ -20,9 +24,10 @@ public class Bullet : MonoBehaviour {
     void OnCollisionEnter(Collision col)
     {
         ContactPoint contact = col.contacts[0];
-        Quaternion rotation = Quaternion.FromToRotation(Vector3.up, contact.normal);
+        //Quaternion rotation = Quaternion.FromToRotation(Vector3.up, contact.normal);
         Vector3 position = contact.point;
         ExplosionDamage(position, radius);
+        Instantiate(explosionParticle, transform.position, transform.rotation);
         Kill();
     }
 
@@ -39,6 +44,19 @@ public class Bullet : MonoBehaviour {
                 Vector3 direction = hitColliders[i].transform.position - explosionPosition;
                 float force = Mathf.Clamp(explosionPower / 3, 0, 100000);
                 hitColliders[i].GetComponent<ImpactReceiver>().AddImpact(direction, force);
+                if(instakill == true)
+                {
+                    hitColliders[i].GetComponent<Health>().TakeDamage(999);
+                }
+                if(noDamage == true)
+                {
+                    hitColliders[i].GetComponent<Health>().TakeDamage(0);
+                }
+                else
+                {
+                    hitColliders[i].GetComponent<Health>().TakeDamage(damage);
+                }
+                
             }
         }
     }

@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class ImpactReceiver : MonoBehaviour
 {
-    float mass = 1;
+    public float mass = 1;
     Vector3 impact = Vector3.zero;
     private CharacterController characterController;
+    public float lerpSpeed = 5;
 
     void Start()
     {
@@ -17,7 +18,7 @@ public class ImpactReceiver : MonoBehaviour
     {
         if (impact.magnitude > 0.2f)
             characterController.Move(impact * Time.deltaTime);
-        impact = Vector3.Lerp(impact, Vector3.zero, 5 * Time.deltaTime);
+        impact = Vector3.Lerp(impact, Vector3.zero, lerpSpeed * Time.deltaTime);
     }
 
     public void AddImpact(Vector3 direction, float force)
